@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekomendasi Palet Warna Poster</title>
+    <style>
+        /* CSS untuk tampilan */
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Penting untuk padding */
+        }
+
+        #hasil-palet {
+            margin-top: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #e9ecef;
+        }
+
+        .palet-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .warna-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .warna-box:hover {
+            transform: scale(1.05);
+        }
+
+        .hex-code {
+            font-size: 0.8em;
+            margin-top: 5px;
+            color: #000; /* Pastikan kode warna terlihat */
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Pilih Tema Poster Anda</h2>
+    
+    <label for="tema-poster">Pilih Tema:</label>
+    <select id="tema-poster" onchange="tampilkanRekomendasi()">
+        <option value="">-- Pilih salah satu --</option>
+        <option value="alam">Alam & Lingkungan 🌿</option>
+		<option value="pendidikan">Pendidikan 🌿</option>
+		<option value="kesehatan">Kesehatan 🌿</option>
+        <option value="teknologi">Teknologi & Masa Depan 🤖</option>
+        <option value="kuliner">Kuliner & Makanan 🍔</option>
+        <option value="retro">Vintage/Retro 📻</option>
+    </select>
+
+    <div id="hasil-palet">
+        <p>Palet warna akan muncul di sini setelah Anda memilih tema.</p>
+        <div class="palet-container" id="palet-display">
+            </div>
+    </div>
+</div>
+
+<script>
+    // Objek untuk menyimpan palet warna berdasarkan tema
+    const paletWarna = {
+        'alam': [
+            { hex: '#4CAF50', deskripsi: 'Hijau Daun' },
+            { hex: '#8BC34A', deskripsi: 'Hijau Muda' },
+            { hex: '#2196F3', deskripsi: 'Biru Langit' },
+            { hex: '#FFEB3B', deskripsi: 'Kuning Sinar' }
+        ],
+        'teknologi': [
+            { hex: '#00BCD4', deskripsi: 'Cyan Elektrik' },
+            { hex: '#212121', deskripsi: 'Abu Gelap' },
+            { hex: '#FF4081', deskripsi: 'Pink Aksen' },
+            { hex: '#E0E0E0', deskripsi: 'Abu Terang' }
+        ],
+		'pendidikan': [
+            { hex: '#003366', deskripsi: 'Biru Tua' },
+            { hex: '#FFC300', deskripsi: 'Kuning Cerah' },
+            { hex: '#4CAF50', deskripsi: 'Hijau Sedang' },
+            { hex: '#F8F8F8', deskripsi: 'Putih/Krem' }
+        ],
+		'kesehatan': [
+            { hex: '#0077C0', deskripsi: 'Biru Medis' },
+            { hex: '#FFC300', deskripsi: 'Kuning Cerah' },
+            { hex: '#4CAF50', deskripsi: 'Hijau Sedang' },
+            { hex: '#F8F8F8', deskripsi: 'Putih/Krem' }
+        ],
+        'kuliner': [
+            { hex: '#FF9800', deskripsi: 'Oranye Hangat' },
+            { hex: '#E91E63', deskripsi: 'Merah Berry' },
+            { hex: '#FFFDE7', deskripsi: 'Krim Lembut' },
+            { hex: '#795548', deskripsi: 'Coklat Tanah' }
+        ],
+        'retro': [
+            { hex: '#F44336', deskripsi: 'Merah Retro' },
+            { hex: '#FFC107', deskripsi: 'Kuning Mustard' },
+            { hex: '#009688', deskripsi: 'Teal Gelap' },
+            { hex: '#BDBDBD', deskripsi: 'Abu Kusam' }
+        ]
+    };
+
+    function tampilkanRekomendasi() {
+        const tema = document.getElementById('tema-poster').value;
+        const hasilPaletDiv = document.getElementById('hasil-palet');
+        const paletDisplay = document.getElementById('palet-display');
+
+        paletDisplay.innerHTML = ''; // Kosongkan tampilan sebelumnya
+
+        if (tema in paletWarna) {
+            const palet = paletWarna[tema];
+            hasilPaletDiv.querySelector('p').textContent = `Palet Rekomendasi untuk Tema **${tema.toUpperCase()}**:`;
+
+            palet.forEach(warna => {
+                const box = document.createElement('div');
+                box.className = 'warna-box';
+                box.style.backgroundColor = warna.hex;
+                // Atur warna teks di dalam box agar terlihat
+                const textColor = getContrastColor(warna.hex); 
+                box.style.color = textColor;
+
+                // Tambahkan kode HEX dan deskripsi
+                box.innerHTML = `
+                    <span style="font-weight: bold;">${warna.deskripsi}</span>
+                    <span class="hex-code" style="color: #000;">${warna.hex}</span>
+                `;
+                paletDisplay.appendChild(box);
+            });
+        } else {
+            hasilPaletDiv.querySelector('p').textContent = "Silakan pilih tema di atas untuk melihat rekomendasi palet warna.";
+        }
+    }
+    
+    // Fungsi sederhana untuk menentukan warna teks kontras (putih atau hitam)
+    function getContrastColor(hex) {
+        // Konversi hex ke RGB
+        const r = parseInt(hex.substring(1, 3), 16);
+        const g = parseInt(hex.substring(3, 5), 16);
+        const b = parseInt(hex.substring(5, 7), 16);
+        
+        // Hitung Luminansi
+        // Formula luminansi (ITU-R BT.709)
+        const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        
+        // Pilih warna teks (putih untuk gelap, hitam untuk terang)
+        return luminance > 0.5 ? '#000000' : '#FFFFFF'; 
+    }
+</script>
+
+</body>
+</html>
